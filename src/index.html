@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Electron updater channels</title>
+  <style>
+    html {
+      height: 100%;
+      background-color: #FFF;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Electron updater used channel example.</h1>
+  </header>
+
+  <main style="font-size:1.2em">
+
+    <p>
+      Current channel: <b><script>document.write(require('electron').remote.autoUpdater.channel)</script></b>
+      <br>
+      Node version: <b><script>document.write(process.versions.node)</script></b>
+      <br>
+      Chrome version: <b><script>document.write(process.versions.chrome)</script></b>
+      <br>
+      Electron version: <b><script>document.write(process.versions.electron)</script></b>
+    </p>
+
+    <label for="channels" style="font-size:16px">Select</label>
+    <select id="channels" name="channels">
+      <option disabled selected>channel</option>
+      <option value="latest">latest</option>
+      <option value="beta">beta</option>
+      <option value="alpha">alpha</option>
+    </select>
+
+    <h3>Messages</h3>
+    <ol id="msg-container"></ol>
+
+  </main>
+
+  <script src="../src-electron/renderer.js"></script>
+
+</body>
+</html>

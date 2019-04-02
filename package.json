@@ -1,0 +1,52 @@
+{
+  "name": "electron-updater-channels",
+  "version": "0.0.1",
+  "main": "main.js",
+  "repository": "git@github.com:borisbutenko/electron-updater-channels.git",
+  "author": "borisbutenko <iamborisbutenko@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "keywords": [
+    "Electron",
+    "auto updater",
+    "channels",
+    "start",
+    "example",
+    "tutorial",
+    "demo"
+  ],
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development electron .",
+    "pack": "electron-builder --dir",
+    "build": "electron-builder"
+  },
+  "build": {
+    "appId": "com.borisbutenko.updater_channels",
+    "productName": "Updater Channels",
+    "mac": {
+      "category": "public.app-category.developer-tools"
+    },
+    "win": {
+      "icon": "src/icons/icon.ico",
+      "target": [
+        "squirrel"
+      ]
+    },
+    "squirrelWindows": {
+      "iconUrl": "https://raw.githubusercontent.com/matiastucci/electron-auto-updater-example/master/icons/icon.ico"
+    }
+  },
+  "devDependencies": {
+    "cross-env": "^5.2.0",
+    "electron": "^4.1.3",
+    "electron-builder": "^20.39.0",
+    "eslint": "^5.16.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-standard": "^4.0.0"
+  },
+  "dependencies": {
+    "eslint-plugin-node": "^8.0.1"
+  }
+}
