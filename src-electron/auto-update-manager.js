@@ -8,7 +8,7 @@ class AutoUpdateManager {
     this.autoUpdater = autoUpdater
     this.version = require('../package.json').version
 
-    this._nutsUrl = 'https://electron-autoupdater-starter-server.now.sh'
+    this._nutsUrl = 'https://electron-updater-channels.herokuapp.com'
     this._platform = os.platform()
     this._arch = os.arch()
 

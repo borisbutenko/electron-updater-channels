@@ -20,7 +20,7 @@ function createWindow () {
   })
 
   mainWindow.webContents.openDevTools()
-  mainWindow.webContents.on('did-finish-load', () => new AutoUpdateManager(mainWindow))
+  mainWindow.webContents.on('did-frame-finish-load', () => new AutoUpdateManager(mainWindow))
 }
 
 app.on('window-all-closed', () => {
