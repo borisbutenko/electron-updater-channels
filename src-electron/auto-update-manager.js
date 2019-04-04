@@ -1,10 +1,12 @@
 module.exports =
 class AutoUpdateManager {
-  constructor (mainWindow) {
+  constructor (mainWindow, channel = 'latest') {
     this.mainWindow = mainWindow
     this.autoUpdater = require('electron').autoUpdater
+    this.autoUpdater.channel = channel
     this.version = require('../package.json').version
     this.init()
+    this.checkForUpdates()
   }
 
   init () {
@@ -41,8 +43,19 @@ class AutoUpdateManager {
         `
       })
     })
+  }
 
+  checkForUpdates () {
+    clearTimeout(this.timeout)
     this.autoUpdater.checkForUpdates()
+    this.timeout = setTimeout(() => {
+      this.checkForUpdates()
+    }, 10 * 60 * 1000)
+  }
+
+  updateChannel (channel) {
+    this.autoUpdater.channel = channel
+    this.checkForUpdates()
   }
 
   sendMessageToWindow (eventName, data) {
