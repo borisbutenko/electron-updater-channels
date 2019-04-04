@@ -89,5 +89,6 @@ class AutoUpdateManager {
 
   sendMessageToWindow (eventName, data) {
     this.mainWindow.webContents.send(eventName, data)
+    console.info(data.msg)
   }
 }
