@@ -17,23 +17,25 @@
   ],
   "scripts": {
     "dev": "cross-env NODE_ENV=development electron .",
-    "pack": "electron-builder --dir",
-    "build": "electron-builder"
+    "dist": "cross-env NODE_ENV=production build -l --x64"
   },
   "build": {
-    "appId": "com.borisbutenko.updater_channels",
-    "productName": "Updater Channels",
+    "appId": "com.electron.${name}",
+    "productName": "Electron Updater Channels",
+    "copyright": "Copyright © ${year} ${author}",
     "mac": {
       "category": "public.app-category.developer-tools"
     },
     "win": {
-      "icon": "src/icons/icon.ico",
       "target": [
-        "squirrel"
+        "nsis"
       ]
     },
-    "squirrelWindows": {
-      "iconUrl": "https://raw.githubusercontent.com/matiastucci/electron-auto-updater-example/master/icons/icon.ico"
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
     }
   },
   "devDependencies": {
@@ -47,6 +49,7 @@
     "eslint-plugin-standard": "^4.0.0"
   },
   "dependencies": {
-    "eslint-plugin-node": "^8.0.1"
+    "eslint-plugin-node": "^8.0.1",
+    "express": "^4.16.4"
   }
 }
