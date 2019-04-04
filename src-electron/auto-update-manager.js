@@ -1,4 +1,5 @@
-const { autoUpdater, ipcMain } = require('electron')
+const { ipcMain } = require('electron')
+const { autoUpdater } = require('electron-updater')
 const log = require('electron-log')
 const version = require('../package.json').version
 
@@ -25,19 +26,32 @@ class AutoUpdateManager {
       this.sendMessageToWindow('message', { msg: `😱 Error: ${ error }` })
     })
 
-    this.autoUpdater.once('checking-for-update', () => {
+    this.autoUpdater.on('checking-for-update', () => {
       this.sendMessageToWindow('message', { msg: '🔎 Checking for updates' })
     })
 
-    this.autoUpdater.once('update-available', () => {
+    this.autoUpdater.on('update-available', () => {
       this.sendMessageToWindow('message', { msg: '🎉 Update available. Downloading ⌛️', hide: false })
     })
 
-    this.autoUpdater.once('update-not-available', () => {
+    this.autoUpdater.on('update-not-available', () => {
       this.sendMessageToWindow('message', { msg: '👎 Update not available' })
     })
 
-    this.autoUpdater.once('update-downloaded', () => {
+    this.autoUpdater.on('download-progress', (progressObj) => {
+      let { bytesPerSecond, percent, transferred, total } = progressObj
+      let logMessage = `Download speed: ${ bytesPerSecond }`
+    
+      logMessage = `${ logMessage } - Downloaded ${ percent } %`
+      logMessage = `${ logMessage } (${ transferred }/${ total })`
+    
+      this.sendStatusToWindow('message', {
+        hide: true,
+        msg: logMessage
+      })
+    })
+
+    this.autoUpdater.on('update-downloaded', () => {
       this.sendMessageToWindow('message', {
         hide: false,
         replaceAll: true,
@@ -54,7 +68,7 @@ class AutoUpdateManager {
 
   checkForUpdates () {
     clearTimeout(this.timeout)
-    this.autoUpdater.checkForUpdates()
+    this.autoUpdater.checkForUpdatesAndNotify()
     this.timeout = setTimeout(() => {
       this.checkForUpdates()
     }, 10 * 60 * 1000)
@@ -69,8 +83,8 @@ class AutoUpdateManager {
         </p>
       `
     })
-    // this.autoUpdater.channel = channel
-    // this.checkForUpdates()
+    this.autoUpdater.channel = channel
+    this.checkForUpdates()
   }
 
   sendMessageToWindow (eventName, data) {
