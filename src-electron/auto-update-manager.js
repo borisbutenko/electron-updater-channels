@@ -1,4 +1,3 @@
-const os = require('os')
 const { autoUpdater } = require('electron')
 
 module.exports =
@@ -7,11 +6,6 @@ class AutoUpdateManager {
     this.mainWindow = mainWindow
     this.autoUpdater = autoUpdater
     this.version = require('../package.json').version
-
-    this._nutsUrl = 'https://electron-updater-channels.herokuapp.com'
-    this._platform = os.platform()
-    this._arch = os.arch()
-
     this.init()
   }
 
@@ -19,25 +13,23 @@ class AutoUpdateManager {
     this.sendMessageToWindow('console', `App version: ${ this.version }`)
     this.sendMessageToWindow('message', { msg: `🖥 App version: ${ this.version }` })
 
-    autoUpdater.setFeedURL(this.feedUrl)
-
-    autoUpdater.on('error', (ev, err) => {
-      this.sendMessageToWindow('message', { msg: `😱 Error: ${ err }` })
+    this.autoUpdater.on('error', (_, error) => {
+      this.sendMessageToWindow('message', { msg: `😱 Error: ${ error }` })
     })
 
-    autoUpdater.once('checking-for-update', (ev, err) => {
+    this.autoUpdater.once('checking-for-update', () => {
       this.sendMessageToWindow('message', { msg: '🔎 Checking for updates' })
     })
 
-    autoUpdater.once('update-available', (ev, err) => {
+    this.autoUpdater.once('update-available', () => {
       this.sendMessageToWindow('message', { msg: '🎉 Update available. Downloading ⌛️', hide: false })
     })
 
-    autoUpdater.once('update-not-available', (ev, err) => {
+    this.autoUpdater.once('update-not-available', () => {
       this.sendMessageToWindow('message', { msg: '👎 Update not available' })
     })
 
-    autoUpdater.once('update-downloaded', (ev, err) => {
+    this.autoUpdater.once('update-downloaded', () => {
       this.sendMessageToWindow('message', {
         hide: false,
         replaceAll: true,
@@ -49,25 +41,10 @@ class AutoUpdateManager {
       })
     })
 
-    console.log(this.feedUrl)
-    autoUpdater.checkForUpdates()
+    this.autoUpdater.checkForUpdates()
   }
 
-  sendMessageToWindow (ev, data) {
-    this.mainWindow.webContents.send(ev, data)
-  }
-
-  get feedUrl () {
-    let url = `${ this._nutsUrl }/update/%s/${ this.version }`
-    switch (this._platform) {
-      case 'darwin': return url.replace('%s', this.platform)
-      case 'win32': return url.replace('%s', 'win32')
-      case 'linux': return url.replace('%s', 'linux')
-      default: return null
-    }
-  }
-
-  get platform () {
-    return `${ this.platform }_${ this._arch }`
+  sendMessageToWindow (eventName, data) {
+    this.mainWindow.webContents.send(eventName, data)
   }
 }
