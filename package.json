@@ -1,6 +1,6 @@
 {
   "name": "electron-updater-channels",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "main.js",
   "repository": "git@github.com:borisbutenko/electron-updater-channels.git",
   "author": "borisbutenko <iamborisbutenko@gmail.com>",
@@ -29,11 +29,6 @@
         "AppImage",
         "deb"
       ]
-    },
-    "publish": {
-      "provider": "github",
-      "owner": "borisbutenko",
-      "repo": "electron-updater-channels"
     }
   },
   "devDependencies": {
