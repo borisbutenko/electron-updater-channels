@@ -1,0 +1,20 @@
+{
+  "appId": "com.electron.${name}",
+  "productName": "electron-updater-channels",
+  "copyright": "Copyright © ${year} ${author}",
+  "artifactName": "${productName}-${version}-${arch}.${ext}",
+  "generateUpdatesFilesForAllChannels": true,
+  "directories": {
+    "output": "server/releases/stable"
+  },
+  "linux": {
+    "target": [
+      "AppImage"
+    ]
+  },
+  "publish": {
+    "url": "http://127.0.0.1:3000/releases/stable",
+    "provider": "generic",
+    "channel": "stable"
+  }
+}

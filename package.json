@@ -1,6 +1,6 @@
 {
   "name": "electron-updater-channels",
-  "version": "0.0.4-beta",
+  "version": "0.0.1",
   "main": "main.js",
   "repository": "git@github.com:borisbutenko/electron-updater-channels.git",
   "author": "borisbutenko <iamborisbutenko@gmail.com>",
@@ -16,21 +16,11 @@
     "demo"
   ],
   "scripts": {
+    "serve": "node server",
     "dev": "cross-env NODE_ENV=development electron .",
-    "dist": "electron-builder --x64 --linux",
-    "gh-publish": "electron-builder --x64 --linux -p always"
-  },
-  "build": {
-    "appId": "com.electron.${name}",
-    "productName": "Electron Updater Channels",
-    "copyright": "Copyright © ${year} ${author}",
-    "generateUpdatesFilesForAllChannels": true,
-    "linux": {
-      "target": [
-        "AppImage",
-        "deb"
-      ]
-    }
+    "dist": "yarn dist:stable",
+    "dist:stable": "electron-builder --x64 --linux --config config/stable.json",
+    "dist:beta": "electron-builder --x64 --linux --config config/beta.json"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",

@@ -1,4 +1,4 @@
-const { ipcMain } = require('electron')
+const { dialog, ipcMain } = require('electron')
 const { autoUpdater } = require('electron-updater')
 const log = require('electron-log')
 const version = require('../package.json').version
@@ -32,7 +32,7 @@ class AutoUpdateManager {
     })
 
     this.autoUpdater.on('update-available', () => {
-      this.sendMessageToWindow('message', { msg: '🎉 Update available. Downloading ⌛️', hide: false })
+      this.sendMessageToWindow('message', { msg: '🎉 Update available. Downloading ⌛️' })
     })
 
     this.autoUpdater.on('update-not-available', () => {
@@ -46,21 +46,20 @@ class AutoUpdateManager {
       logMessage = `${ logMessage } - Downloaded ${ percent } %`
       logMessage = `${ logMessage } (${ transferred }/${ total })`
     
-      this.sendStatusToWindow('message', {
-        hide: true,
-        msg: logMessage
-      })
+      this.sendMessageToWindow('message', { msg: logMessage })
     })
 
     this.autoUpdater.on('update-downloaded', () => {
-      this.sendMessageToWindow('message', {
-        hide: false,
-        replaceAll: true,
-        msg: `
-          <p style="margin:0">
-            🤘 Update downloaded - <a onclick="quitAndInstall()">Restart</a>
-          </p>
-        `
+      dialog.showMessageBox({
+        type: 'info',
+        title: '🤘 Update downloaded',
+        message: '🤘 Update downloaded, do you want update now?',
+        buttons: ['Yep', 'Nope']
+      }, isConfirm => {
+        if (isConfirm === 0) {
+          let [isSilent, isForceRunAfter] = [true, true]
+          autoUpdater.quitAndInstall(isSilent, isForceRunAfter)
+        }
       })
     })
 
@@ -75,9 +74,8 @@ class AutoUpdateManager {
     }, 10 * 60 * 1000)
   }
 
-  updateChannel (channel = 'latest') {
+  updateChannel (channel = 'stable') {
     this.sendMessageToWindow('message', {
-      hide: true,
       msg: `
         <p style="margin:0">
           🤘 Current channel is <b>${ channel }</b>
@@ -87,9 +85,8 @@ class AutoUpdateManager {
 
     this.autoUpdater.channel = channel
     this.autoUpdater.setFeedURL({
-      provider: 'github',
-      owner: 'borisbutenko',
-      repo: 'electron-updater-channels',
+      url: `http://127.0.0.1:3000/releases/${ channel }`,
+      provider: 'generic',
       channel
     })
 
