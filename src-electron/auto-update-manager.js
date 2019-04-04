@@ -1,15 +1,16 @@
-const { autoUpdater } = require('electron')
-
 module.exports =
 class AutoUpdateManager {
   constructor (mainWindow) {
     this.mainWindow = mainWindow
-    this.autoUpdater = autoUpdater
+    this.autoUpdater = require('electron').autoUpdater
     this.version = require('../package.json').version
     this.init()
   }
 
   init () {
+    this.autoUpdater.logger = require('electron-log')
+    this.autoUpdater.logger.transports.file.level = 'info'
+
     this.sendMessageToWindow('console', `App version: ${ this.version }`)
     this.sendMessageToWindow('message', { msg: `🖥 App version: ${ this.version }` })
 
