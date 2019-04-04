@@ -12,13 +12,14 @@ class AutoUpdateManager {
     this.version = version
     
     this.init()
-    this.checkForUpdates()
+    this.updateChannel()
   }
 
   init () {
     this.autoUpdater.logger = log
     this.autoUpdater.logger.transports.file.level = 'info'
 
+    this.sendMessageToWindow('console', { msg: `🖥 App channel: ${ this.autoUpdater.channel }` })
     this.sendMessageToWindow('console', `App version: ${ this.version }`)
     this.sendMessageToWindow('message', { msg: `🖥 App version: ${ this.version }` })
 
@@ -74,7 +75,7 @@ class AutoUpdateManager {
     }, 10 * 60 * 1000)
   }
 
-  updateChannel (channel) {
+  updateChannel (channel = 'latest') {
     this.sendMessageToWindow('message', {
       hide: true,
       msg: `
@@ -83,7 +84,15 @@ class AutoUpdateManager {
         </p>
       `
     })
+
     this.autoUpdater.channel = channel
+    this.autoUpdater.setFeedURL({
+      provider: 'github',
+      owner: 'borisbutenko',
+      repo: 'electron-updater-channels',
+      channel
+    })
+
     this.checkForUpdates()
   }
 

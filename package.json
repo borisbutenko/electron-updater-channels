@@ -1,6 +1,6 @@
 {
   "name": "electron-updater-channels",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "main.js",
   "repository": "git@github.com:borisbutenko/electron-updater-channels.git",
   "author": "borisbutenko <iamborisbutenko@gmail.com>",
@@ -24,6 +24,7 @@
     "appId": "com.electron.${name}",
     "productName": "Electron Updater Channels",
     "copyright": "Copyright © ${year} ${author}",
+    "generateUpdatesFilesForAllChannels": true,
     "linux": {
       "target": [
         "AppImage",
